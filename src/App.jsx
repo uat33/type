@@ -15,6 +15,16 @@ function App() {
     const [firstkey, setfirstkey] = useState(false);
     const [timeUp, setTimeUp] = useState(false);
     const [completedWords, setCompletedWords] = useState(0);
+    const [openModal, setOpenModal] = useState(false);
+
+    console.log(totalCorrect, totalTotal, completedWords);
+    function addLastLine(incorrectChars, completedChars, completeWords) {
+        setCompletedWords(current * 10 + completeWords);
+        setTotalTotal((total) => total + completedChars);
+        setTotalCorrect(
+            (totalCorrect) => totalCorrect + completedChars - incorrectChars
+        );
+    }
 
     function next(length, incorrect) {
         setTotalCorrect((prev) => {
@@ -33,7 +43,7 @@ function App() {
     }
 
     function keypressed(e) {
-        // trigger first keypress if the key is valid and not backspace -- starts timer
+        // starts timer
         if (util.valid(e.key) && e.key !== "Backspace") {
             setfirstkey((firstkey) => !firstkey);
             document.removeEventListener("keydown", keypressed, true);
@@ -45,10 +55,15 @@ function App() {
         document.addEventListener("keydown", keypressed, true);
     }, []);
 
+    function endTimer() {
+        setTimeUp(true);
+        setOpenModal(false);
+    }
+
     return (
         <>
             {firstkey ? (
-                <Timer time={15} active={true} setTimeUp={setTimeUp} />
+                <Timer time={10} active={true} end={endTimer} />
             ) : (
                 <></>
             )}
@@ -59,14 +74,19 @@ function App() {
                         key={i}
                         val={i}
                         next={next}
-                        setCompletedWords={setCompletedWords}
+                        timeUp={timeUp}
+                        addLastLine={addLastLine}
                     />
                 ) : (
                     <Fragment key={i} />
                 );
             })}
 
-            {timeUp ? <ModalElement completed={completedWords} /> : <></>}
+            {timeUp ? (
+                <ModalElement completed={completedWords} open={openModal} />
+            ) : (
+                <></>
+            )}
         </>
     );
 }

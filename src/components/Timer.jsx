@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-function Timer({ time, active, setTimeUp }) {
+function Timer({ time, active, end }) {
     const [seconds, setSeconds] = useState(time);
     const [isActive, setIsActive] = useState(active);
 
@@ -31,7 +31,7 @@ function Timer({ time, active, setTimeUp }) {
 
     useEffect(() => {
         if (seconds === 0) {
-            setTimeUp(true);
+            end();
         }
     }, [seconds]);
 

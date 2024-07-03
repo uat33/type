@@ -18,7 +18,7 @@ const customStyles = {
     },
 };
 function ModalElement(props) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(props.open);
     let subtitle;
 
     function openModal() {
@@ -40,7 +40,7 @@ function ModalElement(props) {
 
     return (
         <div>
-            <button onClick={openModal}>Open Modal</button>
+            {/* <button onClick={openModal}>Open Modal</button> */}
             <Modal
                 isOpen={open}
                 onAfterOpen={afterOpenModal}

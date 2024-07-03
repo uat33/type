@@ -8,6 +8,22 @@ function Line(props) {
     const [line, setLine] = useState([]);
     const [keysPressed, setKeysPressed] = useState([]);
     const [incorrect, setIncorrect] = useState(0);
+    const [completed, setCompleted] = useState({
+        completedWords: 0,
+        completedChars: 0,
+    });
+
+    // add the incorrect letters and words completed from this line
+    useEffect(() => {
+        if (props.timeUp && props.active) {
+            props.addLastLine(
+                incorrect,
+                completed.completedChars,
+                completed.completedWords
+            );
+        }
+    }, [props.timeUp]);
+
     useEffect(() => {
         axios.get(URL).then((res) => {
             const data = res.data;
@@ -48,13 +64,40 @@ function Line(props) {
                 setKeysPressed((prevKeysPressed) =>
                     prevKeysPressed.slice(0, -1)
                 );
+
+                // update the completed chars and completed words
+                // toBeRemoved + 2 because + 1 is the bar
+                setCompleted((completed) => {
+                    return {
+                        ...completed,
+                        completedChars: completed.completedChars - 1,
+                        completedWords:
+                            line[toBeRemoved + 2] === " "
+                                ? completed.completedWords - 1
+                                : completed.completedWords,
+                    };
+                });
             } else {
                 const toBeAdded = keysPressed.length + 1;
+                // if key is wrong
                 if (e.key !== line[toBeAdded]) {
                     setIncorrect((incorrect) => {
                         return incorrect + 1;
                     });
                 }
+                // updated completedchars by 1
+                // if next char is a space or undefined (end of line), update completed words by 1
+                setCompleted((completed) => {
+                    return {
+                        ...completed,
+                        completedChars: completed.completedChars + 1,
+                        completedWords:
+                            line[toBeAdded + 1] === undefined ||
+                            line[toBeAdded + 1] === " "
+                                ? completed.completedWords + 1
+                                : completed.completedWords,
+                    };
+                });
 
                 const copy = [...line];
                 const index = copy.indexOf("|");
