@@ -1,0 +1,58 @@
+import InputTemplate from "./Input";
+
+function AccountTemplate(props) {
+    // State to hold form values
+
+    return (
+        <>
+            <div className="flex items-center justify-center py-12 px-4 bg-stone-700 sm:px-6 lg:px-8 max-w-2xl mx-auto p-4 rounded shadow-lg">
+                <div className="max-w-md w-full space-y-8">
+                    {props.valid === false ? (
+                        <>
+                            <div className="bg-red-700 rounded-md">
+                                {props.invalidText}
+                            </div>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                    <div>
+                        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                            {props.name}
+                        </h2>
+                    </div>
+                    <form
+                        className="mt-8 space-y-6"
+                        onSubmit={props.handleSubmit}
+                    >
+                        <div className="rounded-md shadow-sm -space-y-px">
+                            <InputTemplate
+                                name="username"
+                                value={props.username}
+                                setValue={props.setUsername}
+                                placeholder="Username"
+                            />
+                            <InputTemplate
+                                name="password"
+                                value={props.password}
+                                setValue={props.setPassword}
+                                placeholder="Password"
+                            />
+                        </div>
+
+                        <div>
+                            <button
+                                type="submit"
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                                {props.name}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </>
+    );
+}
+
+export default AccountTemplate;

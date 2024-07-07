@@ -5,6 +5,7 @@ import Line from "./components/Line";
 import "./App.css";
 import Timer from "./components/Timer";
 import util from "./util";
+import Navbar from "./components/Navbar";
 
 function App() {
     const [current, setCurrent] = useState(0);
@@ -16,8 +17,8 @@ function App() {
     const [timeUp, setTimeUp] = useState(false);
     const [completedWords, setCompletedWords] = useState(0);
     const [openModal, setOpenModal] = useState(false);
+    const [time, setTime] = useState(3);
 
-    console.log(totalCorrect, totalTotal, completedWords);
     function addLastLine(incorrectChars, completedChars, completeWords) {
         setCompletedWords(current * 10 + completeWords);
         setTotalTotal((total) => total + completedChars);
@@ -57,13 +58,14 @@ function App() {
 
     function endTimer() {
         setTimeUp(true);
-        setOpenModal(false);
+        setOpenModal(true);
     }
 
     return (
         <>
+            <Navbar />
             {firstkey ? (
-                <Timer time={10} active={true} end={endTimer} />
+                <Timer time={time} active={true} end={endTimer} />
             ) : (
                 <></>
             )}
@@ -83,7 +85,13 @@ function App() {
             })}
 
             {timeUp ? (
-                <ModalElement completed={completedWords} open={openModal} />
+                <ModalElement
+                    completedWords={completedWords}
+                    completedChars={totalTotal}
+                    correctChars={totalCorrect}
+                    open={openModal}
+                    time={time}
+                />
             ) : (
                 <></>
             )}

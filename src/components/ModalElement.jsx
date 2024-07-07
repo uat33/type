@@ -14,7 +14,7 @@ const customStyles = {
         marginRight: "-50%",
         transform: "translate(-50%, -50%)",
         transparent: true,
-        backgroundColor: "#020202",
+        backgroundColor: "#333333",
     },
 };
 function ModalElement(props) {
@@ -29,6 +29,7 @@ function ModalElement(props) {
 
     function afterOpenModal() {
         // references are now sync'd and can be accessed.
+        openModal();
         subtitle.style.color = "#fff";
     }
 
@@ -50,20 +51,34 @@ function ModalElement(props) {
                 transparent={true}
             >
                 <div className="flex justify-between items-center">
-                    <h2
-                        className=""
+                    <h1
+                        className="m-4"
                         ref={(_subtitle) => (subtitle = _subtitle)}
                     >
                         Results
-                    </h2>
+                    </h1>
                     <button onClick={closeModal} className="rounded-full">
                         &#x2715;
                     </button>
                 </div>
 
-                <h1>Blah</h1>
-                <div className="flex justify-center m-auto">
-                    <h3>Completed Words: {props.completed}</h3>
+                <div className="flex flex-col items-center justify-center mx-auto">
+                    <h3 className="my-2">
+                        Completed Words: {props.completedWords}
+                    </h3>
+
+                    <h3 className="my-2">
+                        Accuracy:{" "}
+                        {(
+                            (props.correctChars / props.completedChars) *
+                            100
+                        ).toFixed(1)}
+                        %
+                    </h3>
+                    <h3 className="my-2">
+                        WPM:{" "}
+                        {((60 / props.time) * props.completedWords).toFixed(0)}
+                    </h3>
                 </div>
             </Modal>
         </div>
