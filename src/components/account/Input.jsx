@@ -11,7 +11,7 @@ function InputTemplate(props) {
                 <input
                     id={props.name}
                     name={props.name}
-                    type="text"
+                    type={props.type}
                     autoComplete={props.name}
                     required
                     value={props.value}

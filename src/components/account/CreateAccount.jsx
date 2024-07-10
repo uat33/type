@@ -1,7 +1,10 @@
 // LoginForm.js
 
 import { useState } from "react";
-import AccountTemplate from "./Template";
+import AccountTemplate from "./AccountTemplate";
+import axios from "axios";
+
+const url = import.meta.env.VITE_APP_URL;
 
 function CreateAccount() {
     // State to hold form values
@@ -10,9 +13,16 @@ function CreateAccount() {
     const [valid, setValid] = useState(null);
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitted!", { username, password });
+
+        const response = await axios.post(`${url}/users`, {
+            username,
+            password,
+        });
+        if (response) {
+            console.log("Submitted!");
+        }
     };
 
     return (

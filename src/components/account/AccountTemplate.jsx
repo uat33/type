@@ -31,12 +31,14 @@ function AccountTemplate(props) {
                                 value={props.username}
                                 setValue={props.setUsername}
                                 placeholder="Username"
+                                type="text"
                             />
                             <InputTemplate
                                 name="password"
                                 value={props.password}
                                 setValue={props.setPassword}
                                 placeholder="Password"
+                                type="password"
                             />
                         </div>
 

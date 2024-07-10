@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import util from "../util";
 import { Fragment } from "react";
+const url = import.meta.env.VITE_APP_URL;
 function Line(props) {
-    const URL = "https://random-word-api.vercel.app/api?words=10";
-
     const [line, setLine] = useState([]);
     const [keysPressed, setKeysPressed] = useState([]);
     const [incorrect, setIncorrect] = useState(0);
@@ -12,7 +11,6 @@ function Line(props) {
         completedWords: 0,
         completedChars: 0,
     });
-
     // add the incorrect letters and words completed from this line
     useEffect(() => {
         if (props.timeUp && props.active) {
@@ -25,7 +23,7 @@ function Line(props) {
     }, [props.timeUp]);
 
     useEffect(() => {
-        axios.get(URL).then((res) => {
+        axios.get(`${url}/data`).then((res) => {
             const data = res.data;
 
             const arr = data.join(" ").split("");
