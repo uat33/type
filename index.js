@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 
 const routes = require("./routes/root");
 const userRoutes = require("./routes/userRoutes");
+const dataRoutes = require("./routes/dataRoutes");
 const resultRoutes = require("./routes/resultRoutes");
 const { logger, logEvents } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
@@ -29,6 +30,7 @@ app.use("/", express.static("public"));
 app.use("/", routes);
 app.use("/users", userRoutes);
 app.use("/results", resultRoutes);
+app.use("/data", dataRoutes);
 
 app.all("*", (req, res) => {
 	res.status(404);
