@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import { Link } from "react-router-dom";
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -44,14 +44,19 @@ const Navbar = () => {
                 {/* Right side of the navbar */}
                 <div className="flex items-center">
                     {/* Home button */}
-                    <button className="bg-gray-900 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
-                        Home
-                    </button>
+
+                    <Link to="/">
+                        <button className="bg-gray-900 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+                            Home
+                        </button>
+                    </Link>
 
                     {/* Previous results button */}
-                    <button className="bg-gray-900 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
-                        Previous Results
-                    </button>
+                    <Link to="/history">
+                        <button className="bg-gray-900 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+                            Previous Results
+                        </button>
+                    </Link>
 
                     {/* Dropdown */}
                     <div className="relative" ref={dropdownRef}>
