@@ -3,17 +3,37 @@
 import { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
 import Navbar from "../Navbar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/Auth";
+
+const api = import.meta.env.VITE_APP_URL;
 
 function Login() {
     // State to hold form values
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [valid, setValid] = useState(null);
+    const [errorText, setErrorText] = useState("");
+    const navigate = useNavigate();
+    const { refreshToken } = useAuth();
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitted!", { username, password });
+
+        try {
+            const response = await axios.post(`${api}/users/login`, {
+                username,
+                password,
+            });
+            refreshToken(response.data.user);
+            setValid(true);
+            navigate("/");
+        } catch (error) {
+            setValid(false);
+            setErrorText(error.response.data.message);
+        }
     };
 
     return (
@@ -28,6 +48,7 @@ function Login() {
                 setPassword={setPassword}
                 handleSubmit={handleSubmit}
                 valid={valid}
+                errorText={errorText}
             />
         </>
     );

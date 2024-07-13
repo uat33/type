@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import { useAuth } from "../auth/Auth";
 
-const url = import.meta.env.VITE_APP_URL;
+const api = import.meta.env.VITE_APP_URL;
 
 function CreateAccount() {
     // State to hold form values
@@ -22,15 +22,15 @@ function CreateAccount() {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${url}/users`, {
+            const response = await axios.post(`${api}/users`, {
                 username,
                 password,
             });
+            console.log("response", response);
             refreshToken(response.data.user);
             setValid(true);
             navigate("/");
         } catch (error) {
-            console.log(error.response.data.message);
             if (error.response) {
                 if (error.response.status === 409) {
                     setValid(false);

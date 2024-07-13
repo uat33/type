@@ -19,12 +19,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Typing />} />
                 <Route path="/login" element={<Login />} />
-                <Route
-                    path="/history"
-                    element={
-                        isLoggedIn() ? <History /> : <Navigate to="/login" />
-                    }
-                />
+                <Route path="/history" element={<History />} />
                 {/* <ProtectedRoute path="/history" component={History} /> */}
                 <Route path="/create-account" element={<CreateAccount />} />
             </Routes>

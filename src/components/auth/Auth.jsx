@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-const url = import.meta.env.VITE_APP_URL;
+const api = import.meta.env.VITE_APP_URL;
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         try {
             console.log(user);
             // Example: Fetch new token from server
-            const response = await axios.get(`${url}/auth/token`, {
+            const response = await axios.get(`${api}/auth/token`, {
                 user,
             });
             const newToken = response.data.token;
