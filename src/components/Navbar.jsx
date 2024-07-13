@@ -5,7 +5,6 @@ import Dropdown from "./Dropdown";
 
 const Navbar = () => {
     const { isLoggedIn, userInfo } = useAuth();
-    console.log("user", userInfo);
     return (
         <nav className="bg-gray-800 p-4 fixed w-full z-10 top-0 left-0">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex justify-between items-center">
