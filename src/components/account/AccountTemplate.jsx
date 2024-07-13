@@ -1,4 +1,5 @@
 import InputTemplate from "./Input";
+import { Link } from "react-router-dom";
 
 function AccountTemplate(props) {
     // State to hold form values
@@ -10,7 +11,7 @@ function AccountTemplate(props) {
                     {props.valid === false ? (
                         <>
                             <div className="bg-red-700 rounded-md">
-                                {props.invalidText}
+                                {props.errorText}
                             </div>
                         </>
                     ) : (
@@ -53,6 +54,21 @@ function AccountTemplate(props) {
                     </form>
                 </div>
             </div>
+            {props.name === "Login" ? (
+                <>
+                    <p>Don't have an account?</p>
+                    <Link to="/create-account">
+                        <button>Create Account</button>
+                    </Link>
+                </>
+            ) : (
+                <>
+                    <p>Already have an account?</p>
+                    <Link to="/login">
+                        <button>Login</button>
+                    </Link>
+                </>
+            )}
         </>
     );
 }

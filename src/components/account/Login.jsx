@@ -16,16 +16,18 @@ function Login() {
     };
 
     return (
-        <AccountTemplate
-            invalidText="invalid login"
-            name="Login"
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-            handleSubmit={handleSubmit}
-            valid={valid}
-        />
+        <>
+            <AccountTemplate
+                invalidText="invalid login"
+                name="Login"
+                username={username}
+                setUsername={setUsername}
+                password={password}
+                setPassword={setPassword}
+                handleSubmit={handleSubmit}
+                valid={valid}
+            />
+        </>
     );
 }
 

@@ -11,23 +11,37 @@ function CreateAccount() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [valid, setValid] = useState(null);
+    const [errorText, setErrorText] = useState("");
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post(`${url}/users`, {
-            username,
-            password,
-        });
-        if (response) {
-            console.log("Submitted!");
+        try {
+            const response = await axios.post(`${url}/users`, {
+                username,
+                password,
+            });
+
+            setValid(true);
+        } catch (error) {
+            console.log(error.response.data.message);
+            if (error.response) {
+                if (error.response.status === 409) {
+                    setValid(false);
+                    setErrorText(error.response.data.message);
+                } else if (error.response.status === 400) {
+                    setValid(false);
+                    setErrorText(error.response.data.message);
+                }
+            } else {
+                setError("Failed to create user. Please try again later.");
+            }
         }
     };
 
     return (
         <AccountTemplate
-            invalidText="invalid login"
             name="Create Account"
             username={username}
             setUsername={setUsername}
@@ -35,6 +49,7 @@ function CreateAccount() {
             setPassword={setPassword}
             handleSubmit={handleSubmit}
             valid={valid}
+            errorText={errorText}
         />
     );
 }

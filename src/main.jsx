@@ -7,13 +7,6 @@ import History from "./components/History.jsx";
 import Login from "./components/account/Login.jsx";
 import CreateAccount from "./components/account/CreateAccount.jsx";
 
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-    RouterProvider,
-} from "react-router-dom";
-
 const testData = [
     {
         wpm: 65,
@@ -38,20 +31,4 @@ const testData = [
     },
 ];
 
-// Render the History component with testData
-<History stats={testData} />;
-
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/">
-            <Route index element={<App />} />
-            <Route path="history" element={<History stats={testData} />} />
-            <Route path="login" element={<Login />} />
-            <Route path="create-account" element={<CreateAccount />} />
-        </Route>
-    )
-);
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router} />
-);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
