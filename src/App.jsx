@@ -5,7 +5,7 @@ import {
     Route,
     Navigate,
 } from "react-router-dom";
-import Typing from "./components/Typing";
+import Typing from "./components/typing/Typing";
 import Login from "./components/account/Login";
 import History from "./components/History";
 import CreateAccount from "./components/account/CreateAccount";

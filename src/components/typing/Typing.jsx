@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from "react";
 import ModalElement from "./ModalElement";
 import Line from "./Line";
-import "../App.css";
+import "../../App.css";
 import Timer from "./Timer";
-import util from "../util";
-import Navbar from "./Navbar";
+import util from "../../util";
+import Navbar from "../Navbar";
 
 function Typing() {
     const [current, setCurrent] = useState(0);

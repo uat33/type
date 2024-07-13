@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import util from "../util";
+import util from "../../util";
 import { Fragment } from "react";
 const url = import.meta.env.VITE_APP_URL;
 function Line(props) {
