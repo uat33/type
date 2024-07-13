@@ -6,7 +6,9 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex justify-between items-center">
                 {/* Left side of the navbar */}
                 <div className="flex items-center">
-                    <span className="text-white text-lg">My App</span>
+                    <Link to="/">
+                        <span className="text-white text-lg">Typing Test</span>
+                    </Link>
                 </div>
 
                 {/* Right side of the navbar */}

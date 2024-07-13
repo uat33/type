@@ -61,7 +61,7 @@ function Typing() {
 
     return (
         <>
-            <Navbar />
+            {!openModal ? <Navbar /> : <></>}
             {firstkey ? (
                 <Timer time={time} active={true} end={endTimer} />
             ) : (

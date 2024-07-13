@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
+import Navbar from "../Navbar";
 
 function Login() {
     // State to hold form values
@@ -17,6 +18,7 @@ function Login() {
 
     return (
         <>
+            <Navbar />
             <AccountTemplate
                 invalidText="invalid login"
                 name="Login"

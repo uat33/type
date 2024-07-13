@@ -3,6 +3,9 @@
 import { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../Navbar";
+import { useAuth } from "../auth/Auth";
 
 const url = import.meta.env.VITE_APP_URL;
 
@@ -12,7 +15,8 @@ function CreateAccount() {
     const [password, setPassword] = useState("");
     const [valid, setValid] = useState(null);
     const [errorText, setErrorText] = useState("");
-
+    const navigate = useNavigate();
+    const { refreshToken } = useAuth();
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,8 +26,9 @@ function CreateAccount() {
                 username,
                 password,
             });
-
+            refreshToken(response.data.user);
             setValid(true);
+            navigate("/");
         } catch (error) {
             console.log(error.response.data.message);
             if (error.response) {
@@ -41,16 +46,19 @@ function CreateAccount() {
     };
 
     return (
-        <AccountTemplate
-            name="Create Account"
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-            handleSubmit={handleSubmit}
-            valid={valid}
-            errorText={errorText}
-        />
+        <>
+            <Navbar />
+            <AccountTemplate
+                name="Create Account"
+                username={username}
+                setUsername={setUsername}
+                password={password}
+                setPassword={setPassword}
+                handleSubmit={handleSubmit}
+                valid={valid}
+                errorText={errorText}
+            />
+        </>
     );
 }
 
