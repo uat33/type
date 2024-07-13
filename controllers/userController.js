@@ -12,17 +12,37 @@ const numSaltRounds = 10;
 
 const loginUser = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ message: "All fields required" });
+    }
     try {
-        const user = await User.findOne({ username });
-
-        if (!user || !bcrypt.compareSync(password, user.password)) {
-            return res.status(401).json({ error: "Invalid credentials" });
+        const user = await User.findOne({ username }).lean().exec();
+        if (!user) {
+            return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        return res.status(201).status({ message: "Logged in" });
+        // Compare passwords asynchronously
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err) {
+                return res
+                    .status(500)
+                    .json({ message: "Error comparing the passwords." });
+            }
+
+            if (!result) {
+                return res.status(401).json({ message: "Invalid credentials" });
+            }
+
+            const returnValue = { username: user.username, id: user._id };
+
+            // Passwords match, return success response
+            return res
+                .status(201)
+                .json({ message: "Logged in", user: returnValue });
+        });
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({ error: "Server error" });
+        return res.status(500).json({ message: "Server error" });
     }
 });
 
