@@ -10,6 +10,22 @@ const schema = new passwordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits();
 const numSaltRounds = 10;
 
+const loginUser = asyncHandler(async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.findOne({ username });
+
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        return res.status(201).status({ message: "Logged in" });
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 // @desc get all users
 // @route get /users
 // @access Private
@@ -54,10 +70,17 @@ const createNewUser = asyncHandler(async (req, res) => {
 
         const user = await User.create(userObject);
 
+        const returnValue = { username: user.username, id: user._id };
         if (user) {
+            // const token = jwt.sign(
+            //     { userId: user._id, username: user.username },
+            //     process.env.JWT_SECRET,
+            //     { expiresIn: "1h" } // Token expires in 1 hour
+            // );
+
             return res
                 .status(201)
-                .json({ message: `New user ${username} created.` });
+                .json({ message: "User created.", user: returnValue });
         } else {
             return res.status(400).json({ message: `Invalid user data` });
         }
@@ -121,4 +144,5 @@ module.exports = {
     createNewUser,
     deleteUser,
     updateUser,
+    loginUser,
 };

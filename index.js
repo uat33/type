@@ -10,6 +10,7 @@ const routes = require("./routes/root");
 const userRoutes = require("./routes/userRoutes");
 const dataRoutes = require("./routes/dataRoutes");
 const resultRoutes = require("./routes/resultRoutes");
+const authRoutes = require("./routes/authRoutes");
 const { logger, logEvents } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 const corsOptions = require("./config/corsOptions");
@@ -31,6 +32,7 @@ app.use("/", routes);
 app.use("/users", userRoutes);
 app.use("/results", resultRoutes);
 app.use("/data", dataRoutes);
+app.use("/auth", authRoutes);
 
 app.all("*", (req, res) => {
     res.status(404);
