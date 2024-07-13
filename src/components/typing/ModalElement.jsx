@@ -18,13 +18,12 @@ const customStyles = {
     },
 };
 function ModalElement(props) {
-    const [open, setOpen] = useState(props.open);
     let subtitle;
 
     function openModal() {
         // blur background
         document.getElementById("root").style.filter = "blur(5px)";
-        setOpen(true);
+        props.setOpen(true);
     }
 
     function afterOpenModal() {
@@ -36,14 +35,14 @@ function ModalElement(props) {
     function closeModal() {
         // unblur background
         document.getElementById("root").style.filter = "";
-        setOpen(false);
+        props.setOpen(false);
     }
 
     return (
         <div>
             {/* <button onClick={openModal}>Open Modal</button> */}
             <Modal
-                isOpen={open}
+                isOpen={props.open}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
                 style={customStyles}

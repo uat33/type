@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "./auth/Auth";
+import Dropdown from "./Dropdown";
+
 const Navbar = () => {
+    const { isLoggedIn, userInfo } = useAuth();
+    console.log("user", userInfo);
     return (
         <nav className="bg-gray-800 p-4 fixed w-full z-10 top-0 left-0">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -28,11 +33,17 @@ const Navbar = () => {
                         </button>
                     </Link>
 
-                    <Link to="/login">
-                        <button className="bg-gray-900 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
-                            Login
-                        </button>
-                    </Link>
+                    {!isLoggedIn() ? (
+                        <Link to="/login">
+                            <button className="bg-gray-900 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+                                Login
+                            </button>
+                        </Link>
+                    ) : (
+                        <>
+                            <Dropdown username={userInfo.username}></Dropdown>
+                        </>
+                    )}
                 </div>
             </div>
         </nav>

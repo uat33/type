@@ -11,7 +11,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
-
+    const [userInfo, setUserInfo] = useState({});
     const isLoggedIn = () => {
         if (!token) return false;
         const decodedToken = jwtDecode(token);
@@ -33,6 +33,11 @@ export const AuthProvider = ({ children }) => {
             });
             const newToken = response.data.token;
             setToken(newToken);
+            setUserInfo({
+                username: user.username,
+                id: user.id,
+            });
+            console.log(userInfo);
             localStorage.setItem("token", newToken);
         } catch (error) {
             console.error("Token refresh failed:", error);
@@ -51,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ token, isLoggedIn, logout, refreshToken }}
+            value={{ token, isLoggedIn, logout, refreshToken, userInfo }}
         >
             {children}
         </AuthContext.Provider>

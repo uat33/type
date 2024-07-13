@@ -89,6 +89,7 @@ function Typing() {
                     correctChars={totalCorrect}
                     open={openModal}
                     time={time}
+                    setOpen={setOpenModal}
                 />
             ) : (
                 <></>

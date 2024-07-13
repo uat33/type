@@ -1,7 +1,10 @@
-function Dropdown() {
+import { useEffect, useRef, useState } from "react";
+import { useAuth } from "./auth/Auth";
+
+function Dropdown({ username }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-
+    const { logout } = useAuth();
     // Function to handle click outside the dropdown
     const handleClickOutside = (event) => {
         if (
@@ -35,11 +38,12 @@ function Dropdown() {
             {/* Dropdown */}
             <div className="relative" ref={dropdownRef}>
                 <button
-                    className="bg-gray-900 text-white rounded-md py-2 px-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                    className="bg-gray-900 text-white rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                     onClick={toggleDropdown}
                 >
-                    Menu
+                    {username[0]}
                 </button>
+
                 {/* Conditional rendering based on dropdown state */}
                 {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-56 rounded-md bg-white shadow-lg py-1">
@@ -48,19 +52,14 @@ function Dropdown() {
                             href="#"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                            Item 1
+                            Edit Profile
                         </a>
                         <a
                             href="#"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={logout}
                         >
-                            Item 2
-                        </a>
-                        <a
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                            Item 3
+                            Logout
                         </a>
                     </div>
                 )}
