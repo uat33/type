@@ -24,7 +24,7 @@ const getData = asyncHandler(async (req, res) => {
 			});
 		})
 		.on("error", (err) => {
-			console.error("Error: " + err.message);
+			console.log("Error: " + err.message);
 			res.status(500).json({ error: "Failed to fetch data" });
 		});
 });

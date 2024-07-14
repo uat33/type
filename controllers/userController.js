@@ -41,7 +41,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 .json({ message: "Logged in", user: returnValue });
         });
     } catch (error) {
-        console.error("Login error:", error);
+        console.log("Login error:", error);
         return res.status(500).json({ message: "Server error" });
     }
 });
@@ -105,7 +105,7 @@ const createNewUser = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: `Invalid user data` });
         }
     } catch (error) {
-        console.error("Error creating user:", error);
+        console.log("Error creating user:", error);
         return res.status(500).json({ message: "Server error" });
     }
 });
@@ -153,7 +153,6 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 
     const result = await user.deleteOne();
-    console.log(result);
 
     const reply = `Username ${user.username} deleted.`;
     res.json(reply);

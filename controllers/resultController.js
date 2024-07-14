@@ -1,17 +1,17 @@
 const Result = require("../models/Result");
+const User = require("../models/User");
+
 const asyncHandler = require("express-async-handler");
 
 const getResultsByUser = asyncHandler(async (req, res) => {
-    const { id } = req.body;
-
+    const { id } = req.params;
     try {
         // Query posts where user field matches the userId
-        const results = await Result.find({ user: userId });
-
+        const results = await Result.find({ user: id }).populate("user");
         // Return JSON response
-        res.json(results);
+        res.status(200).json(results);
     } catch (error) {
-        console.error("Error fetching results:", error);
+        console.log("Error fetching results:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -22,20 +22,40 @@ const getAllResults = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "No results found" });
     }
 
-    res.json(users);
+    res.json(results);
 });
 
 const createNewResult = asyncHandler(async (req, res) => {
-    const { wpm, accuracy, completedWords, user } = req.body;
+    const { completedWords, totalCorrect, totalTotal, user, time } = req.body;
 
-    if (!wpm || !user || !accuracy || !completedWords) {
+    if (
+        completedWords === undefined ||
+        !user ||
+        totalCorrect === undefined ||
+        totalTotal === undefined ||
+        !time
+    ) {
         return res.status(400).json({ message: "All fields required." });
     }
+    const userDoc = await User.findById(user.id);
 
-    const result = Result.create({ wpm, accuracy, completedWords, user });
+    if (!userDoc) {
+        return res.status(500).json({ message: "User not found." });
+    }
+
+    const wpm = (60 / time) * completedWords;
+    const accuracy =
+        totalTotal === 0 ? 0 : ((totalCorrect / totalTotal) * 100).toFixed(1);
+    const result = Result.create({
+        wpm,
+        accuracy,
+        completedWords,
+        user: userDoc,
+        time,
+    });
 
     if (result) {
-        res.status(201).json({ message: `New post created.` });
+        res.status(201).json({ message: `New result created.` });
     } else {
         res.status(400).json({ message: `Invalid user data` });
     }
@@ -51,7 +71,7 @@ const deleteResult = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: `Entry not found` });
     }
 
-    const result = await user.deleteOne();
+    const result = await User.deleteOne();
 
     res.json({ message: "Post deleted." });
 });
