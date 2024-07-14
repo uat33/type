@@ -10,7 +10,7 @@ function History() {
     useEffect(() => {
         if (isLoggedIn()) {
             axios.get(`${api}/results/${userInfo.id}`).then((res) => {
-                setData(res.data);
+                setData(res.data.reverse());
             });
         }
     }, []);
@@ -26,7 +26,9 @@ function History() {
                 <h1>Log in to see past results</h1>
             ) : (
                 <div className="max-w-2xl mx-auto p-4 rounded shadow-lg">
-                    <h2 className="text-xl font-bold mb-4">History</h2>
+                    <h2 className="text-4xl font-bold mb-4">
+                        Previous Results
+                    </h2>
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-300">
                             <thead className="">
