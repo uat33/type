@@ -70,12 +70,15 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @route patch /users
 // @access Private
 const createNewUser = asyncHandler(async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
+    const { username, password, confirmPassword } = req.body;
+    if (!username || !password || !confirmPassword) {
         return res.status(400).json({ message: "All fields required" });
     }
 
     try {
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
         // check that a username isn't profane
         if (filter.isProfane(username)) {
             return res.status(400).json({ message: "Inappropriate username." });
