@@ -11,7 +11,10 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const [userInfo, setUserInfo] = useState({});
+    const [userInfo, setUserInfo] = useState({
+        username: localStorage.getItem("username"),
+        id: localStorage.getItem("id"),
+    });
     const isLoggedIn = () => {
         if (!token) return false;
         const decodedToken = jwtDecode(token);
@@ -20,39 +23,42 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
+        localStorage.clear();
+
         setToken(null);
+        setUserInfo(null);
     };
 
     const refreshToken = async (user) => {
         try {
-            console.log(user);
             // Example: Fetch new token from server
             const response = await axios.get(`${api}/auth/token`, {
                 user,
             });
             const newToken = response.data.token;
+
             setToken(newToken);
             setUserInfo({
                 username: user.username,
                 id: user.id,
             });
-            console.log(userInfo);
             localStorage.setItem("token", newToken);
+            localStorage.setItem("username", user.username);
+            localStorage.setItem("id", user.id);
         } catch (error) {
             console.error("Token refresh failed:", error);
             logout();
         }
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token && isLoggedIn()) {
-            setToken(token);
-        } else {
-            logout();
-        }
-    }, []);
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token");
+    //     if (token && isLoggedIn()) {
+    //         setToken(token);
+    //     } else {
+    //         logout();
+    //     }
+    // }, []);
 
     return (
         <AuthContext.Provider

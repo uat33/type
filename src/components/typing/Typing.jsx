@@ -5,7 +5,10 @@ import "../../App.css";
 import Timer from "./Timer";
 import util from "../../util";
 import Navbar from "../Navbar";
+import { useAuth } from "../auth/Auth";
+import axios from "axios";
 
+const api = import.meta.env.VITE_APP_URL;
 function Typing() {
     const [current, setCurrent] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
@@ -16,13 +19,17 @@ function Typing() {
     const [timeUp, setTimeUp] = useState(false);
     const [completedWords, setCompletedWords] = useState(0);
     const [openModal, setOpenModal] = useState(false);
-    const [time, setTime] = useState(3);
+    const [time, setTime] = useState(30);
+    const { userInfo } = useAuth();
+    const [done, setDone] = useState(false);
+
     function addLastLine(incorrectChars, completedChars, completeWords) {
         setCompletedWords(current * 10 + completeWords);
         setTotalTotal((total) => total + completedChars);
         setTotalCorrect(
             (totalCorrect) => totalCorrect + completedChars - incorrectChars
         );
+        setDone(true);
     }
 
     function next(length, incorrect) {
@@ -53,6 +60,17 @@ function Typing() {
         // listen for the first key
         document.addEventListener("keydown", keypressed, true);
     }, []);
+
+    useEffect(() => {
+        if (!done) return;
+        const response = axios.post(`${api}/results`, {
+            completedWords,
+            totalCorrect,
+            totalTotal,
+            time,
+            user: userInfo,
+        });
+    }, [done]);
 
     function endTimer() {
         setTimeUp(true);

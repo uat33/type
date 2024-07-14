@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "./auth/Auth";
 
-function Dropdown({ username }) {
+function Dropdown() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const { logout } = useAuth();
+    const { logout, userInfo } = useAuth();
     // Function to handle click outside the dropdown
     const handleClickOutside = (event) => {
         if (
@@ -41,7 +41,7 @@ function Dropdown({ username }) {
                     className="bg-gray-900 text-white rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                     onClick={toggleDropdown}
                 >
-                    {username[0]}
+                    {userInfo?.username?.charAt(0)}
                 </button>
 
                 {/* Conditional rendering based on dropdown state */}

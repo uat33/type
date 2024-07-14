@@ -40,7 +40,7 @@ const Navbar = () => {
                         </Link>
                     ) : (
                         <>
-                            <Dropdown username={userInfo.username}></Dropdown>
+                            <Dropdown username={userInfo?.username} />
                         </>
                     )}
                 </div>

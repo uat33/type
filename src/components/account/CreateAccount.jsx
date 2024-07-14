@@ -26,7 +26,6 @@ function CreateAccount() {
                 username,
                 password,
             });
-            console.log("response", response);
             refreshToken(response.data.user);
             setValid(true);
             navigate("/");
