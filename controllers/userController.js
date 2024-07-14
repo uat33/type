@@ -10,6 +10,13 @@ const schema = new passwordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits();
 const numSaltRounds = 10;
 
+const weakPasswordMap = {
+    min: "Password must be 8 characters.",
+    lowercase: "Password must have at least 1 lowercase character.",
+    uppercase: "Password must have at least 1 uppercase character.",
+    digits: "Password must have at least 1 number.",
+};
+
 const loginUser = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -69,21 +76,28 @@ const createNewUser = asyncHandler(async (req, res) => {
     }
 
     try {
+        // check that a username isn't profane
         if (filter.isProfane(username)) {
             return res.status(400).json({ message: "Inappropriate username." });
         }
-
-        // TODO: password strength
-        // if (!schema.validate(password)) {
-        //     const missing = schema.validate(password, { list: true });
-
-        //     return res.status(400).json({ message: missing });
-        // }
+        // check that the username hasn't been taken
         const duplicate = await User.findOne({ username }).lean().exec();
         if (duplicate) {
             return res.status(409).json({ message: "Username taken" });
         }
 
+        // check if the password is strong enough
+        // return an appropriate message
+        if (!schema.validate(password)) {
+            const missing = schema.validate(password, { list: true });
+            const missingText = missing
+                .map((m) => weakPasswordMap[m])
+                .join("\n");
+            return res
+                .status(400)
+                .json({ message: "Weak Password", missingText });
+        }
+        // save user
         const hashed = await bcrypt.hash(password, numSaltRounds);
 
         const userObject = { username, password: hashed };
@@ -92,18 +106,11 @@ const createNewUser = asyncHandler(async (req, res) => {
 
         const returnValue = { username: user.username, id: user._id };
         if (user) {
-            // const token = jwt.sign(
-            //     { userId: user._id, username: user.username },
-            //     process.env.JWT_SECRET,
-            //     { expiresIn: "1h" } // Token expires in 1 hour
-            // );
-
             return res
                 .status(201)
                 .json({ message: "User created.", user: returnValue });
-        } else {
-            return res.status(400).json({ message: `Invalid user data` });
         }
+        return res.status(400).json({ message: `Invalid user data` });
     } catch (error) {
         console.log("Error creating user:", error);
         return res.status(500).json({ message: "Server error" });
