@@ -13,6 +13,7 @@ function CreateAccount() {
     // State to hold form values
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [valid, setValid] = useState(null);
     const [errorText, setErrorText] = useState("");
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ function CreateAccount() {
             const response = await axios.post(`${api}/users`, {
                 username,
                 password,
+                confirmPassword
             });
             refreshToken(response.data.user);
             setValid(true);
@@ -60,6 +62,8 @@ function CreateAccount() {
                 handleSubmit={handleSubmit}
                 valid={valid}
                 errorText={errorText}
+                confirmPassword={confirmPassword}
+                setConfirmPassword={setConfirmPassword}
             />
         </>
     );
