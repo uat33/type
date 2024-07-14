@@ -37,6 +37,10 @@ function CreateAccount() {
                 } else if (error.response.status === 400) {
                     setValid(false);
                     setErrorText(error.response.data.message);
+
+                    if (error.response.data.message === "Weak Password") {
+                        setErrorText(error.response.data.missingText);
+                    }
                 }
             } else {
                 setError("Failed to create user. Please try again later.");

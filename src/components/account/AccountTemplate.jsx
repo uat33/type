@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function AccountTemplate(props) {
     // State to hold form values
-
+    const separated = props.errorText.split("\n");
     return (
         <>
             <div className="flex items-center justify-center py-12 px-4 bg-stone-700 sm:px-6 lg:px-8 max-w-2xl mx-auto p-4 rounded shadow-lg">
@@ -11,7 +11,9 @@ function AccountTemplate(props) {
                     {props.valid === false ? (
                         <>
                             <div className="bg-red-700 rounded-md">
-                                {props.errorText}
+                                {separated.map((e, i) => (
+                                    <div key={i}>{e}</div>
+                                ))}
                             </div>
                         </>
                     ) : (
