@@ -1,6 +1,6 @@
 // AuthContext.js
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 const api = import.meta.env.VITE_APP_URL;
 import axios from "axios";
@@ -50,15 +50,6 @@ export const AuthProvider = ({ children }) => {
             logout();
         }
     };
-
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token");
-    //     if (token && isLoggedIn()) {
-    //         setToken(token);
-    //     } else {
-    //         logout();
-    //     }
-    // }, []);
 
     return (
         <AuthContext.Provider

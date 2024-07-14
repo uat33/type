@@ -14,30 +14,6 @@ function History() {
             });
         }
     }, []);
-    const stats = [
-        {
-            wpm: 65,
-            accuracy: 92,
-            completed: 150,
-            time: 120,
-            date: "2023-06-12T12:30:00Z",
-        },
-        {
-            wpm: 70,
-            accuracy: 95,
-            completed: 180,
-            time: 110,
-            date: "2023-06-15T14:15:00Z",
-        },
-        {
-            wpm: 60,
-            accuracy: 90,
-            completed: 140,
-            time: 130,
-            date: "2023-06-18T10:00:00Z",
-        },
-        // Add more entries as needed
-    ];
     const headerClasses =
         "px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-center";
 

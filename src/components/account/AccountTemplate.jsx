@@ -1,3 +1,4 @@
+import React from "react";
 import InputTemplate from "./Input";
 import { Link } from "react-router-dom";
 
