@@ -109,7 +109,6 @@ function Line(props) {
         if (props.active) {
             document.addEventListener("keydown", action, true);
         }
-
         // Cleanup function to remove the event listener
         return () => {
             document.removeEventListener("keydown", action, true);

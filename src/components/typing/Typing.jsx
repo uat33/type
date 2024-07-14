@@ -7,6 +7,7 @@ import util from "../../util";
 import Navbar from "../Navbar";
 import { useAuth } from "../auth/Auth";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const api = import.meta.env.VITE_APP_URL;
 function Typing() {
@@ -101,14 +102,20 @@ function Typing() {
             })}
 
             {timeUp ? (
-                <ModalElement
-                    completedWords={completedWords}
-                    completedChars={totalTotal}
-                    correctChars={totalCorrect}
-                    open={openModal}
-                    time={time}
-                    setOpen={setOpenModal}
-                />
+                <>
+                    <ModalElement
+                        completedWords={completedWords}
+                        completedChars={totalTotal}
+                        correctChars={totalCorrect}
+                        open={openModal}
+                        time={time}
+                        setOpen={setOpenModal}
+                    />
+
+                    <button onClick={() => window.location.reload()}>
+                        &#8635;
+                    </button>
+                </>
             ) : (
                 <></>
             )}
