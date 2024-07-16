@@ -6,7 +6,7 @@ import Timer from "./Timer";
 import util from "../../util";
 import Navbar from "../Navbar";
 import { useAuth } from "../auth/Auth";
-import api from "../../api";
+import { useAPI } from "../../Api";
 
 function Typing() {
     const [current, setCurrent] = useState(0);
@@ -21,6 +21,7 @@ function Typing() {
     const [time, setTime] = useState(30);
     const { userInfo } = useAuth();
     const [done, setDone] = useState(false);
+    const { api } = useAPI();
 
     function addLastLine(incorrectChars, completedChars, completeWords) {
         setCompletedWords(current * 10 + completeWords);

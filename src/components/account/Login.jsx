@@ -5,7 +5,7 @@ import AccountTemplate from "./AccountTemplate";
 import Navbar from "../Navbar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/Auth";
-import api from "../../api";
+import { useAPI } from "../../Api";
 
 function Login() {
     // State to hold form values
@@ -15,6 +15,7 @@ function Login() {
     const [errorText, setErrorText] = useState("");
     const navigate = useNavigate();
     const { refreshToken } = useAuth();
+    const { api } = useAPI();
 
     // Handle form submission
     const handleSubmit = async (e) => {

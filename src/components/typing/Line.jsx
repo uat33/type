@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import util from "../../util";
 import { Fragment } from "react";
-import api from "../../api";
+import { useAPI } from "../../Api";
 
 function Line(props) {
     const [line, setLine] = useState([]);
@@ -11,6 +11,8 @@ function Line(props) {
         completedWords: 0,
         completedChars: 0,
     });
+    const { api } = useAPI();
+
     // add the incorrect letters and words completed from this line
     useEffect(() => {
         if (props.timeUp && props.active) {

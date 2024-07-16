@@ -2,8 +2,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import api from "../../api";
+import axios from "axios";
 const AuthContext = createContext();
+const url = import.meta.env.VITE_APP_URL;
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -33,15 +34,14 @@ export const AuthProvider = ({ children }) => {
     const refreshToken = async (user) => {
         try {
             // Example: Fetch new token from server
-            const response = await api.get("/auth/refresh-token", {
+            const response = await axios.get(`${url}/auth/refresh-token`, {
                 user,
             });
             const newToken = response.data.token;
 
             setToken(newToken);
             setUserInfo({
-                username: user.username,
-                id: user.id,
+                ...user,
             });
             localStorage.setItem("token", newToken);
             localStorage.setItem("username", user.username);
@@ -51,25 +51,8 @@ export const AuthProvider = ({ children }) => {
             logout();
         }
     };
-    console.log(token);
 
-    // TODO: this doesn't work at all
-    useEffect(() => {
-        const handleStorageChange = () => {
-            const token = localStorage.getItem("token");
-            console.log("oldtoken", token);
-            setToken(token ? token : null);
-            console.log("newtoken", token);
-        };
-        handleStorageChange();
-        // Listen for changes to 'myData' in local storage
-        // window.addEventListener("storage", handleStorageChange);
-
-        // // Clean up the event listener when component unmounts
-        // return () => {
-        //     window.removeEventListener("storage", handleStorageChange);
-        // };
-    }, [localStorage.getItem("token")]);
+    console.log(userInfo, token);
 
     return (
         <AuthContext.Provider

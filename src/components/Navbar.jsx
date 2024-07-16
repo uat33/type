@@ -23,6 +23,7 @@ const Navbar = () => {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
     return (
         <nav
             className={`bg-custom p-4 fixed w-full z-10 top-0 left-0 ${
@@ -64,7 +65,7 @@ const Navbar = () => {
                         </Link>
                     ) : (
                         <>
-                            <Dropdown username={userInfo?.username} />
+                            <Dropdown />
                         </>
                     )}
                 </div>

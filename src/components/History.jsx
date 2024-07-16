@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { useAuth } from "./auth/Auth";
 
-import api from "../api";
+import { useAPI } from "../Api";
 function History() {
+    const { api } = useAPI();
+
     const { isLoggedIn, userInfo } = useAuth();
     const [data, setData] = useState([]);
     useEffect(() => {

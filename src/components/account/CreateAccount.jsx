@@ -5,10 +5,12 @@ import AccountTemplate from "./AccountTemplate";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import { useAuth } from "../auth/Auth";
-import api from "../../api";
+import { useAPI } from "../../Api";
 
 function CreateAccount() {
     // State to hold form values
+    const { api } = useAPI();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

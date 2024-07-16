@@ -5,7 +5,7 @@ import Login from "./components/account/Login";
 import History from "./components/History";
 import CreateAccount from "./components/account/CreateAccount";
 import { AuthProvider } from "./components/auth/Auth";
-
+import { APIProvider } from "./Api";
 function App() {
     return (
         <Router>
@@ -23,7 +23,9 @@ function AppWithAuth() {
     return (
         <>
             <AuthProvider>
-                <App />
+                <APIProvider>
+                    <App />
+                </APIProvider>
             </AuthProvider>
         </>
     );
