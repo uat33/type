@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import util from "../../util";
 import { Fragment } from "react";
-const api = import.meta.env.VITE_APP_URL;
+import api from "../../api";
+
 function Line(props) {
     const [line, setLine] = useState([]);
     const [keysPressed, setKeysPressed] = useState([]);
@@ -23,7 +23,7 @@ function Line(props) {
     }, [props.timeUp]);
 
     useEffect(() => {
-        axios.get(`${api}/data`).then((res) => {
+        api.get("/data").then((res) => {
             const data = res.data;
 
             const arr = data.join(" ").split("");

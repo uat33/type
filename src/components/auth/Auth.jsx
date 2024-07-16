@@ -1,10 +1,8 @@
 // AuthContext.js
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-const api = import.meta.env.VITE_APP_URL;
-import axios from "axios";
-
+import api from "../../api";
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -19,6 +17,9 @@ export const AuthProvider = ({ children }) => {
         if (!token) return false;
         const decodedToken = jwtDecode(token);
         const currentTime = Date.now() / 1000;
+        if (decodedToken.exp <= currentTime) {
+            localStorage.clear();
+        }
         return decodedToken.exp > currentTime;
     };
 
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     const refreshToken = async (user) => {
         try {
             // Example: Fetch new token from server
-            const response = await axios.get(`${api}/auth/token`, {
+            const response = await api.get("/auth/refresh-token", {
                 user,
             });
             const newToken = response.data.token;
@@ -50,6 +51,25 @@ export const AuthProvider = ({ children }) => {
             logout();
         }
     };
+    console.log(token);
+
+    // TODO: this doesn't work at all
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const token = localStorage.getItem("token");
+            console.log("oldtoken", token);
+            setToken(token ? token : null);
+            console.log("newtoken", token);
+        };
+        handleStorageChange();
+        // Listen for changes to 'myData' in local storage
+        // window.addEventListener("storage", handleStorageChange);
+
+        // // Clean up the event listener when component unmounts
+        // return () => {
+        //     window.removeEventListener("storage", handleStorageChange);
+        // };
+    }, [localStorage.getItem("token")]);
 
     return (
         <AuthContext.Provider

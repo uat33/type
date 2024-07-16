@@ -2,12 +2,10 @@
 
 import React, { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import { useAuth } from "../auth/Auth";
-
-const api = import.meta.env.VITE_APP_URL;
+import api from "../../api";
 
 function CreateAccount() {
     // State to hold form values
@@ -23,10 +21,10 @@ function CreateAccount() {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${api}/users`, {
+            const response = await api.post("/users", {
                 username,
                 password,
-                confirmPassword
+                confirmPassword,
             });
             refreshToken(response.data.user);
             setValid(true);

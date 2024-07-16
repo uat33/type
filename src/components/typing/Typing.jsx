@@ -6,10 +6,8 @@ import Timer from "./Timer";
 import util from "../../util";
 import Navbar from "../Navbar";
 import { useAuth } from "../auth/Auth";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import api from "../../api";
 
-const api = import.meta.env.VITE_APP_URL;
 function Typing() {
     const [current, setCurrent] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
@@ -64,7 +62,7 @@ function Typing() {
 
     useEffect(() => {
         if (!done) return;
-        const response = axios.post(`${api}/results`, {
+        const response = api.post("results", {
             completedWords,
             totalCorrect,
             totalTotal,

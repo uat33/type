@@ -3,11 +3,9 @@
 import React, { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
 import Navbar from "../Navbar";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/Auth";
-
-const api = import.meta.env.VITE_APP_URL;
+import api from "../../api";
 
 function Login() {
     // State to hold form values
@@ -23,7 +21,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${api}/users/login`, {
+            const response = await api.post("/users/login", {
                 username,
                 password,
             });

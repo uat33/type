@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { useAuth } from "./auth/Auth";
-import axios from "axios";
-const api = import.meta.env.VITE_APP_URL;
 
+import api from "../api";
 function History() {
     const { isLoggedIn, userInfo } = useAuth();
     const [data, setData] = useState([]);
     useEffect(() => {
         if (isLoggedIn()) {
-            axios.get(`${api}/results/${userInfo.id}`).then((res) => {
+            api.get(`/results/${userInfo.id}`).then((res) => {
                 setData(res.data.reverse());
             });
         }
