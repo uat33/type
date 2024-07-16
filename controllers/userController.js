@@ -53,6 +53,20 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
+const getUserById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ message: "All fields required" });
+    }
+
+    const user = await User.findById(id).exec();
+    if (!user) {
+        return res.status(400).json({ message: `User not found` });
+    }
+
+    return res.status(201).json({ message: "Found user", user: user });
+});
+
 // @desc get all users
 // @route get /users
 // @access Private
@@ -174,4 +188,5 @@ module.exports = {
     deleteUser,
     updateUser,
     loginUser,
+    getUserById,
 };
