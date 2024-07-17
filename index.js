@@ -22,17 +22,17 @@ const app = express();
 connect();
 
 app.use(logger);
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/", express.static("public"));
 
-app.use("/", routes);
-app.use("/users", userRoutes);
-app.use("/results", resultRoutes);
-app.use("/data", dataRoutes);
-app.use("/auth", authRoutes);
+// app.use("/", routes);
+app.use("/api/users", userRoutes);
+app.use("/api/results", resultRoutes);
+app.use("/api/data", dataRoutes);
+app.use("/api/auth", authRoutes);
 
 app.all("*", (req, res) => {
     res.status(404);
