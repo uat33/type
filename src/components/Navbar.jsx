@@ -4,7 +4,7 @@ import { useAuth } from "./auth/Auth";
 import Dropdown from "./Dropdown";
 
 const Navbar = () => {
-    const { isLoggedIn, userInfo } = useAuth();
+    const { isLoggedIn } = useAuth();
     const [isScrolled, setIsScrolled] = useState(false);
 
     // add a border at the bottom of the navbar upon scroll

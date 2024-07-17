@@ -12,7 +12,7 @@ export const useAPI = () => useContext(APIContext);
 export const APIProvider = ({ children }) => {
     const { refreshToken, userInfo } = useAuth();
     const api = axios.create({
-        baseURL: url,
+        baseURL: `${url}/api`,
         timeout: 10000,
         headers: {
             "Content-Type": "application/json",

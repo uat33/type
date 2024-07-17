@@ -6,6 +6,8 @@ import History from "./components/History";
 import CreateAccount from "./components/account/CreateAccount";
 import { AuthProvider } from "./components/auth/Auth";
 import { APIProvider } from "./Api";
+import NotFound from "./components/NotFound";
+
 function App() {
     return (
         <Router>
@@ -14,6 +16,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/history" element={<History />} />
                 <Route path="/create-account" element={<CreateAccount />} />
+                <Route path="/*" element={<NotFound />} />
             </Routes>
         </Router>
     );
