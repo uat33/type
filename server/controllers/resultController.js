@@ -5,6 +5,9 @@ const asyncHandler = require("express-async-handler");
 
 const getResultsByUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
+        if (!id) {
+        return res.status(400).json({ message: "ID required" });
+    }
     try {
         // Query posts where user field matches the userId
         const results = await Result.find({ user: id }).populate("user");

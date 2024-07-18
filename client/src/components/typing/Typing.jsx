@@ -5,8 +5,8 @@ import "../../App.css";
 import Timer from "./Timer";
 import util from "../../util";
 import Navbar from "../Navbar";
-import { useAuth } from "../auth/Auth";
 import { useAPI } from "../../Api";
+import { useAuth } from "../../auth/Auth";
 
 function Typing() {
     const [current, setCurrent] = useState(0);
@@ -18,8 +18,8 @@ function Typing() {
     const [timeUp, setTimeUp] = useState(false);
     const [completedWords, setCompletedWords] = useState(0);
     const [openModal, setOpenModal] = useState(false);
-    const [time, setTime] = useState(30);
-    const { userInfo } = useAuth();
+    const [time, setTime] = useState(3);
+    const { userInfo, isLoggedIn } = useAuth();
     const [done, setDone] = useState(false);
     const { api } = useAPI();
 
@@ -62,7 +62,7 @@ function Typing() {
     }, []);
 
     useEffect(() => {
-        if (!done) return;
+        if (!done || !isLoggedIn()) return;
         const response = api.post("results", {
             completedWords,
             totalCorrect,
@@ -85,21 +85,23 @@ function Typing() {
             ) : (
                 <></>
             )}
-            {allLines.map((b, i) => {
-                return i >= firstLine ? (
-                    <Line
-                        active={i === current}
-                        key={i}
-                        val={i}
-                        next={next}
-                        timeUp={timeUp}
-                        addLastLine={addLastLine}
-                    />
-                ) : (
-                    <Fragment key={i} />
-                );
-            })}
 
+            <div>
+                {allLines.map((b, i) => {
+                    return i >= firstLine ? (
+                        <Line
+                            active={i === current}
+                            key={i}
+                            val={i}
+                            next={next}
+                            timeUp={timeUp}
+                            addLastLine={addLastLine}
+                        />
+                    ) : (
+                        <Fragment key={i} />
+                    );
+                })}
+            </div>
             {timeUp ? (
                 <>
                     <ModalElement

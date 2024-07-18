@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import { useAuth } from "./auth/Auth";
 
 import { useAPI } from "../Api";
+import { useAuth } from "../auth/Auth";
+
 function History() {
     const { api } = useAPI();
 
     const { isLoggedIn, userInfo } = useAuth();
     const [data, setData] = useState([]);
     useEffect(() => {
-        if (isLoggedIn()) {
+        // TODO: refresh issue
+        if (isLoggedIn() && userInfo) {
             api.get(`/results/${userInfo.id}`).then((res) => {
                 setData(res.data.reverse());
             });
         }
-    }, []);
+    }, [userInfo]);
     const headerClasses =
         "px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-center";
 

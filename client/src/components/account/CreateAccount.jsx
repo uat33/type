@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
-import { useAuth } from "../auth/Auth";
 import { useAPI } from "../../Api";
+import { useAuth } from "../../auth/Auth";
 
 function CreateAccount() {
     // State to hold form values

@@ -1,6 +1,6 @@
 // AuthContext.js
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 const AuthContext = createContext();
@@ -10,7 +10,20 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const [userInfo, setUserInfo] = useState({});
+    const [userInfo, setUserInfo] = useState(null);
+    // when a refreshes or re-enters page before token has expired
+    useEffect(() => {
+        if (!token) return;
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        if (decodedToken.exp > currentTime && !userInfo) {
+            setUserInfo({
+                userId: decodedToken.userId,
+                username: decodedToken.username,
+            });
+        }
+    }, []);
+
     const isLoggedIn = () => {
         if (!token) return false;
         const decodedToken = jwtDecode(token);
@@ -36,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         try {
             // Example: Fetch new token from server
             const response = await axios.get(`${url}/api/auth/refresh-token`, {
-                user,
+                params: user,
             });
             const newToken = response.data.token;
 

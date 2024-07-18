@@ -2,7 +2,7 @@ import axios from "axios";
 const url = import.meta.env.VITE_APP_URL;
 
 import React, { createContext, useContext } from "react";
-import { useAuth } from "./components/auth/Auth";
+import { useAuth } from "./auth/Auth";
 import { jwtDecode } from "jwt-decode";
 
 const APIContext = createContext();
@@ -10,7 +10,7 @@ const APIContext = createContext();
 export const useAPI = () => useContext(APIContext);
 
 export const APIProvider = ({ children }) => {
-    const { refreshToken, userInfo } = useAuth();
+    // const { refreshToken, userInfo } = useAuth();
     const api = axios.create({
         baseURL: `${url}/api`,
         timeout: 10000,
@@ -34,10 +34,10 @@ export const APIProvider = ({ children }) => {
                     refreshToken(userInfo);
                     // Get the new token from local storage
                     // Update authorization header with new token
-                    // config.headers.Authorization = `Bearer ${newToken}`;
+                    config.headers.Authorization = `Bearer ${newToken}`;
                 } else {
                     // Token is still valid, set Authorization header
-                    // config.headers.Authorization = `Bearer ${token}`;
+                    config.headers.Authorization = `Bearer ${token}`;
                 }
             }
 

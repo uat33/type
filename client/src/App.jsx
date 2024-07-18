@@ -4,7 +4,7 @@ import Typing from "./components/typing/Typing";
 import Login from "./components/account/Login";
 import History from "./components/History";
 import CreateAccount from "./components/account/CreateAccount";
-import { AuthProvider } from "./components/auth/Auth";
+import { AuthProvider } from "./auth/Auth";
 import { APIProvider } from "./Api";
 import NotFound from "./components/NotFound";
 

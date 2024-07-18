@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "./auth/Auth";
 import Dropdown from "./Dropdown";
+import { useAuth } from "../auth/Auth";
 
 const Navbar = () => {
     const { isLoggedIn } = useAuth();
@@ -34,7 +34,7 @@ const Navbar = () => {
                 {/* Left side of the navbar */}
                 <div className="flex items-center">
                     <Link to="/">
-                        <span className="text-white text-4xl text-blue-600">
+                        <span className="text-4xl text-blue-600">
                             Typing Test
                         </span>
                     </Link>
