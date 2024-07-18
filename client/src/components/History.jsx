@@ -10,7 +10,6 @@ function History() {
     const { isLoggedIn, userInfo } = useAuth();
     const [data, setData] = useState([]);
     useEffect(() => {
-        // TODO: refresh issue
         if (isLoggedIn() && userInfo) {
             api.get(`/results/${userInfo.id}`).then((res) => {
                 setData(res.data.reverse());
