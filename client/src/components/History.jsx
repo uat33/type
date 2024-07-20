@@ -22,7 +22,6 @@ function History() {
                 return;
             }
         }
-
         getData();
     }, [userInfo]);
     const headerClasses =

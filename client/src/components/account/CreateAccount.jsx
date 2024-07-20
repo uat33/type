@@ -14,7 +14,7 @@ function CreateAccount() {
     const [valid, setValid] = useState(null);
     const [errorText, setErrorText] = useState("");
     const navigate = useNavigate();
-    const { refreshToken } = useAuth();
+    const { createToken } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,7 +25,7 @@ function CreateAccount() {
                 password,
                 confirmPassword,
             });
-            refreshToken(response.data.user);
+            createToken(response.data.user);
             setValid(true);
             navigate("/");
         } catch (error) {

@@ -1,61 +1,87 @@
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import React, { createContext, useContext, useState, useEffect } from "react";
-
-const url = import.meta.env.VITE_APP_URL;
+import { useAPI } from "../Api";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem("token"));
     const [userInfo, setUserInfo] = useState(null);
-    // when a refreshes or re-enters page before token has expired
+    const [expireTime, setExpireTime] = useState(null);
+    const { api } = useAPI();
+
     useEffect(() => {
-        if (!token) return;
-        const decodedToken = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-        if (decodedToken.exp > currentTime && !userInfo) {
-            setUserInfo({
-                id: decodedToken.userId,
-                username: decodedToken.username,
-            });
+        if (userInfo) return;
+
+        async function getUser() {
+            try {
+                const response = await api.get("/auth/user");
+                const decodedToken = response.data.data;
+                const currentTime = Date.now() / 1000;
+                if (currentTime < decodedToken.exp) {
+                    setUserInfo({
+                        id: decodedToken.userId,
+                        username: decodedToken.username,
+                    });
+                    setExpireTime(decodedToken.exp);
+                    console.log(userInfo);
+                }
+            } catch (error) {
+                console.log("Invalid token.");
+            }
         }
+
+        getUser();
     }, []);
 
     const isLoggedIn = () => {
-        if (!token) return false;
-        const decodedToken = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-        if (decodedToken.exp <= currentTime) {
-            // logout();
-            return false;
-        }
-        return true;
+        if (!expireTime) return false;
+        return expireTime > Date.now() / 1000;
     };
 
     const logout = () => {
-        localStorage.clear();
+        async function deleteToken() {
+            try {
+                const response = await api.delete("/auth/token");
+                setExpireTime(null);
+                setUserInfo(null);
+            } catch (error) {
+                console.log("Failed to logout");
+            }
+        }
+        deleteToken();
+    };
 
-        setToken(null);
-        setUserInfo(null);
+    const createToken = async (user) => {
+        setUserInfo({
+            ...user,
+        });
+        try {
+            //  Fetch new token from server
+            const response = await api.get("/auth/token", {
+                params: user,
+                withCredentials: true,
+            });
+            if (response.status === 201) {
+                setExpireTime(Date.now() / 1000 + 60 * 60);
+            }
+        } catch (error) {
+            console.error("Token refresh failed:", error);
+        }
     };
 
     const refreshToken = async (user) => {
-        if (!userInfo || user.id !== userInfo.id) {
-            setUserInfo({
-                ...user,
-            });
-        }
+        const currentTime = Date.now() / 1000;
+        console.log("current time is ", currentTime);
+
         try {
             //  Fetch new token from server
-            const response = await axios.get(`${url}/api/auth/refresh-token`, {
+            const response = await api.patch("/auth/token", {
                 params: user,
+                withCredentials: true,
             });
-            const newToken = response.data.token;
-
-            setToken(newToken);
-            localStorage.setItem("token", newToken);
+            if (response.status === 201) {
+                setExpireTime(Date.now() / 1000 + 60 * 60);
+            }
         } catch (error) {
             console.error("Token refresh failed:", error);
             logout();
@@ -64,7 +90,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ token, isLoggedIn, logout, refreshToken, userInfo }}
+            value={{ isLoggedIn, logout, refreshToken, userInfo, createToken }}
         >
             {children}
         </AuthContext.Provider>

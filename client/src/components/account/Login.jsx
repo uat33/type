@@ -11,7 +11,7 @@ function Login() {
     const [valid, setValid] = useState(null);
     const [errorText, setErrorText] = useState("");
     const navigate = useNavigate();
-    const { refreshToken } = useAuth();
+    const { createToken } = useAuth();
     const { api } = useAPI();
 
     const handleSubmit = async (e) => {
@@ -21,7 +21,7 @@ function Login() {
                 username,
                 password,
             });
-            refreshToken(response.data.user);
+            createToken(response.data.user);
             setValid(true);
             navigate("/");
         } catch (error) {

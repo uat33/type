@@ -25,11 +25,11 @@ function App() {
 function AppWithAuth() {
     return (
         <>
-            <AuthProvider>
-                <APIProvider>
+            <APIProvider>
+                <AuthProvider>
                     <App />
-                </APIProvider>
-            </AuthProvider>
+                </AuthProvider>
+            </APIProvider>
         </>
     );
 }

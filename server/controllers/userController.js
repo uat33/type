@@ -175,42 +175,11 @@ const updateUser = asyncHandler(async (req, res) => {
     res.json({ message: `${updatedUser.username} updated` });
 });
 
-/**
- * Delete user. Not currently used.
- */
-// const deleteUser = asyncHandler(async (req, res) => {
-//     const { id } = req.body;
 
-//     if (!id) {
-//         return res.status(400).json({ message: "ID required" });
-//     }
-
-//     await Result.deleteMany({ user: id }, (err) => {
-//         if (err) {
-//             return (
-//                 res.status(400), json({ message: "Failed to delete results" })
-//             );
-//         } else {
-//             return res.status(200), json({ message: "Deleted results" });
-//         }
-//     });
-
-//     const user = await User.findById(id).exec();
-
-//     if (!user) {
-//         return res.status(400).json({ message: "User not found" });
-//     }
-
-//     const result = await user.deleteOne();
-
-//     const reply = `Username ${user.username} deleted.`;
-//     res.json(reply);
-// });
 
 module.exports = {
     getAllUsers,
     createNewUser,
-    // deleteUser,
     updateUser,
     loginUser,
     getUserById,
