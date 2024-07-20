@@ -1,4 +1,5 @@
 import axios from "axios";
+// server url
 const url = import.meta.env.VITE_APP_URL;
 
 import React, { createContext, useContext } from "react";
@@ -10,7 +11,7 @@ const APIContext = createContext();
 export const useAPI = () => useContext(APIContext);
 
 export const APIProvider = ({ children }) => {
-    // const { refreshToken, userInfo } = useAuth();
+    const { refreshToken, userInfo, logout } = useAuth();
     const api = axios.create({
         baseURL: `${url}/api`,
         timeout: 10000,
@@ -21,8 +22,8 @@ export const APIProvider = ({ children }) => {
 
     api.interceptors.request.use(
         async function (config) {
-            // Retrieve context values
-            const token = localStorage.getItem("token");
+            // get the token
+            let token = localStorage.getItem("token");
             if (token) {
                 // Decode token to check expiration
                 const decodedToken = jwtDecode(token);
@@ -31,14 +32,13 @@ export const APIProvider = ({ children }) => {
                 // Check if token is expired or about to expire within 5 minutes
                 if (decodedToken.exp - currentTime <= 300) {
                     // Token is about to expire or expired, refresh token
-                    refreshToken(userInfo);
-                    // Get the new token from local storage
-                    // Update authorization header with new token
-                    config.headers.Authorization = `Bearer ${newToken}`;
-                } else {
-                    // Token is still valid, set Authorization header
-                    config.headers.Authorization = `Bearer ${token}`;
+                    await refreshToken(userInfo);
+                    token = localStorage.getItem("token");
                 }
+                if (decodedToken.exp <= currentTime) {
+                    logout();
+                }
+                config.headers.Authorization = `Bearer ${token}`;
             }
 
             return config;

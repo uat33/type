@@ -1,5 +1,3 @@
-// LoginForm.js
-
 import React, { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
 import Navbar from "../Navbar";
@@ -8,7 +6,6 @@ import { useAPI } from "../../Api";
 import { useAuth } from "../../auth/Auth";
 
 function Login() {
-    // State to hold form values
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [valid, setValid] = useState(null);
@@ -17,10 +14,8 @@ function Login() {
     const { refreshToken } = useAuth();
     const { api } = useAPI();
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const response = await api.post("/users/login", {
                 username,
@@ -30,6 +25,7 @@ function Login() {
             setValid(true);
             navigate("/");
         } catch (error) {
+            console.log(error);
             setValid(false);
             setErrorText(error.response.data.message);
         }
@@ -39,7 +35,7 @@ function Login() {
         <>
             <Navbar />
             <AccountTemplate
-                invalidText="invalid login"
+                invalidText="Invalid Login"
                 name="Login"
                 username={username}
                 setUsername={setUsername}

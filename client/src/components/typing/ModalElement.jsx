@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Modal from "react-modal";
 import ReactModal from "react-modal";
 
@@ -27,7 +26,6 @@ function ModalElement(props) {
     }
 
     function afterOpenModal() {
-        // references are now sync'd and can be accessed.
         openModal();
         subtitle.style.color = "#fff";
     }
@@ -40,7 +38,6 @@ function ModalElement(props) {
 
     return (
         <div>
-            {/* <button onClick={openModal}>Open Modal</button> */}
             <Modal
                 isOpen={props.open}
                 onAfterOpen={afterOpenModal}

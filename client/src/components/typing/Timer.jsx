@@ -6,6 +6,7 @@ function Timer({ time, active, end }) {
     useEffect(() => {
         let interval = null;
         if (isActive) {
+            // if time is active decrement timer by 1 every second until it is 0
             interval = setInterval(() => {
                 setSeconds((seconds) => {
                     if (seconds === 0) {
@@ -20,33 +21,21 @@ function Timer({ time, active, end }) {
         return () => clearInterval(interval);
     }, [isActive]);
 
-    function toggle() {
-        setIsActive(!isActive);
-    }
-
-    function reset() {
-        setSeconds(0);
-        setIsActive(false);
-    }
-
+    // when the timer runs out, call the end function
     useEffect(() => {
         if (seconds === 0) {
             end();
         }
     }, [seconds]);
 
+    // leave this here in case some formatting should be added later
     const formatTime = (timeInSeconds) => {
         return `${timeInSeconds}`;
-        // const minutes = Math.floor(timeInSeconds / 60);
-        // const seconds = timeInSeconds % 60;
-        // return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     };
 
     return (
         <div>
             <h1>{formatTime(seconds)}</h1>
-            {/* <button onClick={toggle}>{isActive ? "Pause" : "Start"}</button>
-      <button onClick={reset}>Reset</button> */}
         </div>
     );
 }

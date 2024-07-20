@@ -13,7 +13,7 @@ function Line(props) {
     });
     const { api } = useAPI();
 
-    // add the incorrect letters and words completed from this line
+    // add the incorrect letters and words completed from this line if it is active when the time runs out
     useEffect(() => {
         if (props.timeUp && props.active) {
             props.addLastLine(
@@ -25,38 +25,49 @@ function Line(props) {
     }, [props.timeUp]);
 
     useEffect(() => {
-        api.get("/data").then((res) => {
-            const data = res.data;
-
-            const arr = data.join(" ").split("");
-            setLine(["|", ...arr]);
-        });
+        async function getLine() {
+            try {
+                await api.get("/data").then((res) => {
+                    const arr = res.data.join(" ").split("");
+                    setLine(["|", ...arr]);
+                });
+            } catch (error) {
+                console.log("Failed to get words");
+            }
+        }
+        getLine();
     }, []);
 
+    // go to next line when this line is done
     useEffect(() => {
         if (props.active && line[line.length - 1] === "|") {
             props.next(line.length - 1, incorrect);
         }
     }, [line, incorrect]);
 
+    /**
+     * Keypress logic
+     */
     useEffect(() => {
         function action(e) {
-            e.preventDefault();
             if (!util.valid(e.key)) {
                 return;
             }
 
             if (e.key === "Backspace") {
+                // exit if the line is done or nothing has been entered
                 if (
                     keysPressed.length === 0 ||
                     keysPressed.length >= line.length
                 )
                     return;
+
+                // increment incorrect if the removed key does not match the actual key
                 const toBeRemoved = keysPressed.length - 1;
                 if (keysPressed[toBeRemoved] !== line[toBeRemoved]) {
                     setIncorrect((incorrect) => incorrect - 1);
                 }
-
+                // advance the bar and remove the last key pressed from previous keys
                 const copy = [...line];
                 const index = copy.indexOf("|");
                 [copy[index], copy[index - 1]] = [copy[index - 1], copy[index]];
@@ -98,7 +109,7 @@ function Line(props) {
                                 : completed.completedWords,
                     };
                 });
-
+                // advance bar and add pressed key
                 const copy = [...line];
                 const index = copy.indexOf("|");
 
@@ -108,6 +119,7 @@ function Line(props) {
             }
         }
 
+        // keydown event listener if the line is active
         if (props.active) {
             document.addEventListener("keydown", action, true);
         }
@@ -122,22 +134,23 @@ function Line(props) {
             <div className="inline-flex">
                 {line.map((c, i) => {
                     let classes = "whitespace-break-spaces text-xl ";
-
+                    // make the bar yellow and give it a pulse if this line is active
                     if (c === "|") {
                         if (props.active) {
                             classes += "text-yellow-600 animate-pulse";
                         } else {
-                            return <Fragment key={i}></Fragment>;
+                            return <Fragment key={i}></Fragment>; // if line is not active, do not display bar
                         }
                     }
 
                     if (i < keysPressed.length) {
-                        classes +=
-                            keysPressed[i] === c
-                                ? "text-green-600"
-                                : c !== " "
-                                ? "text-red-600"
-                                : "bg-red-600";
+                        if (keysPressed[i] === c) {
+                            classes += "text-green-600";
+                        } else if (c !== " ") {
+                            classes += "text-red-600";
+                        } else {
+                            classes += "bg-red-600";
+                        }
                     }
 
                     return (

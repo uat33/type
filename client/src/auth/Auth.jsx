@@ -1,11 +1,10 @@
-// AuthContext.js
-
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-const AuthContext = createContext();
+import { jwtDecode } from "jwt-decode";
+import React, { createContext, useContext, useState, useEffect } from "react";
+
 const url = import.meta.env.VITE_APP_URL;
 
+const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         const decodedToken = jwtDecode(token);
         const currentTime = Date.now() / 1000;
         if (decodedToken.exp <= currentTime) {
-            localStorage.clear();
+            // logout();
             return false;
         }
         return true;
@@ -43,11 +42,13 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshToken = async (user) => {
-        setUserInfo({
-            ...user,
-        });
+        if (!userInfo || user.id !== userInfo.id) {
+            setUserInfo({
+                ...user,
+            });
+        }
         try {
-            // Example: Fetch new token from server
+            //  Fetch new token from server
             const response = await axios.get(`${url}/api/auth/refresh-token`, {
                 params: user,
             });

@@ -8,6 +8,7 @@ const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
 
     // add a border at the bottom of the navbar upon scroll
+    // currently, this is only used when the user has a lot of results in the past results section
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;
@@ -31,7 +32,6 @@ const Navbar = () => {
             }`}
         >
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex justify-between items-center">
-                {/* Left side of the navbar */}
                 <div className="flex items-center">
                     <Link to="/">
                         <span className="text-4xl text-blue-600">
@@ -40,17 +40,13 @@ const Navbar = () => {
                     </Link>
                 </div>
 
-                {/* Right side of the navbar */}
                 <div className="flex items-center">
-                    {/* Home button */}
-
                     <Link to="/">
                         <button className="bg-blue-600 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
                             Home
                         </button>
                     </Link>
 
-                    {/* Previous results button */}
                     <Link to="/history">
                         <button className="bg-blue-600 text-white rounded-md py-2 px-4 mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
                             Previous Results

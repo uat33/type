@@ -1,5 +1,3 @@
-// LoginForm.js
-
 import React, { useState } from "react";
 import AccountTemplate from "./AccountTemplate";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +6,6 @@ import { useAPI } from "../../Api";
 import { useAuth } from "../../auth/Auth";
 
 function CreateAccount() {
-    // State to hold form values
     const { api } = useAPI();
 
     const [username, setUsername] = useState("");
@@ -18,7 +15,7 @@ function CreateAccount() {
     const [errorText, setErrorText] = useState("");
     const navigate = useNavigate();
     const { refreshToken } = useAuth();
-    // Handle form submission
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 

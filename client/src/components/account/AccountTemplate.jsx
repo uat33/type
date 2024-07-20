@@ -3,7 +3,6 @@ import InputTemplate from "./Input";
 import { Link } from "react-router-dom";
 
 function AccountTemplate(props) {
-    // State to hold form values
     const separated = props.errorText.split("\n");
     return (
         <>
@@ -21,7 +20,7 @@ function AccountTemplate(props) {
                         <></>
                     )}
                     <div>
-                        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        <h2 className="mt-6 text-center text-3xl font-extrabold">
                             {props.name}
                         </h2>
                     </div>

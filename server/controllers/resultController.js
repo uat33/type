@@ -3,9 +3,12 @@ const User = require("../models/User");
 
 const asyncHandler = require("express-async-handler");
 
+/**
+ * Use id to find the results for a specific user
+ */
 const getResultsByUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
-        if (!id) {
+    if (!id) {
         return res.status(400).json({ message: "ID required" });
     }
     try {
@@ -19,18 +22,13 @@ const getResultsByUser = asyncHandler(async (req, res) => {
     }
 });
 
-const getAllResults = asyncHandler(async (req, res) => {
-    const results = await Result.find().lean();
-    if (!results?.length) {
-        return res.status(400).json({ message: "No results found" });
-    }
-
-    res.json(results);
-});
-
+/**
+ * Verify data and create a new result.
+ */
 const createNewResult = asyncHandler(async (req, res) => {
     const { completedWords, totalCorrect, totalTotal, user, time } = req.body;
 
+    // some of these can be 0 so check that they are undefined and not just falsy
     if (
         completedWords === undefined ||
         !user ||
@@ -46,6 +44,7 @@ const createNewResult = asyncHandler(async (req, res) => {
         return res.status(500).json({ message: "User not found." });
     }
 
+    // calculate wpm and accuracy
     const wpm = (60 / time) * completedWords;
     const accuracy =
         totalTotal === 0 ? 0 : ((totalCorrect / totalTotal) * 100).toFixed(1);
@@ -64,25 +63,7 @@ const createNewResult = asyncHandler(async (req, res) => {
     }
 });
 
-const deleteResult = asyncHandler(async (req, res) => {
-    const { id } = req.body;
-    if (!id) {
-        return res.status(400).json({ message: `All fields required` });
-    }
-    const entry = await Result.findById(id).exec();
-    if (!entry) {
-        return res.status(400).json({ message: `Entry not found` });
-    }
-
-    const result = await User.deleteOne();
-
-    res.json({ message: "Post deleted." });
-});
-
 module.exports = {
-    getAllResults,
     createNewResult,
-    // updatePost,
-    deleteResult,
     getResultsByUser,
 };

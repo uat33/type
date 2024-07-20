@@ -4,17 +4,26 @@ import Navbar from "./Navbar";
 import { useAPI } from "../Api";
 import { useAuth } from "../auth/Auth";
 
+// get and display past results if the user is logged in
 function History() {
     const { api } = useAPI();
 
-    const { isLoggedIn, userInfo } = useAuth();
+    const { isLoggedIn, userInfo, logout } = useAuth();
     const [data, setData] = useState([]);
+
+    // get the user's past results
     useEffect(() => {
-        if (isLoggedIn() && userInfo) {
-            api.get(`/results/${userInfo.id}`).then((res) => {
-                setData(res.data.reverse());
-            });
+        async function getData() {
+            try {
+                await api.get(`/results/${userInfo.id}`).then((res) => {
+                    setData(res.data.reverse());
+                });
+            } catch (error) {
+                return;
+            }
         }
+
+        getData();
     }, [userInfo]);
     const headerClasses =
         "px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-center";
@@ -25,7 +34,6 @@ function History() {
             <Navbar />
 
             {!isLoggedIn() ? (
-                // <h1>Log in to see past results</h1>
                 <h1>Log in to see past results</h1>
             ) : (
                 <div className="max-w-2xl mx-auto p-4 rounded shadow-lg">

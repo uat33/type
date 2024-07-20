@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const routes = require("./routes/root");
 const userRoutes = require("./routes/userRoutes");
 const dataRoutes = require("./routes/dataRoutes");
 const resultRoutes = require("./routes/resultRoutes");
@@ -26,9 +25,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/", express.static("public"));
-
-// app.use("/", routes);
 app.use("/api/users", userRoutes);
 app.use("/api/results", resultRoutes);
 app.use("/api/data", dataRoutes);

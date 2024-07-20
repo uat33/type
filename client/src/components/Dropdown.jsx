@@ -36,7 +36,6 @@ function Dropdown() {
     };
     return (
         <>
-            {/* Dropdown */}
             <div className="relative" ref={dropdownRef}>
                 <button
                     className="bg-blue-600 text-white rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
@@ -45,17 +44,8 @@ function Dropdown() {
                     {userInfo?.username?.charAt(0)}
                 </button>
 
-                {/* Conditional rendering based on dropdown state */}
                 {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-56 rounded-md bg-white shadow-lg py-1">
-                        {/* Example dropdown items */}
-                        {/* <a
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => navigate("/edit-profile/")}
-                        >
-                            Edit Profile
-                        </a> */}
                         <a
                             href="#"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

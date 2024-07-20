@@ -1,3 +1,2 @@
-// just the react app localhost for now
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = [process.env.CLIENT];
 module.exports = allowedOrigins;

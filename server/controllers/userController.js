@@ -5,11 +5,11 @@ const bcrypt = require("bcrypt");
 
 const Filter = require("bad-words");
 const filter = new Filter();
+
+// set minimum password constraints
 const passwordValidator = require("password-validator");
 const schema = new passwordValidator();
 schema.is().min(8).has().uppercase().has().lowercase().has().digits();
-const numSaltRounds = 10;
-
 const weakPasswordMap = {
     min: "Password must be 8 characters.",
     lowercase: "Password must have at least 1 lowercase character.",
@@ -17,6 +17,11 @@ const weakPasswordMap = {
     digits: "Password must have at least 1 number.",
 };
 
+const numSaltRounds = 10;
+
+/**
+ * Verify user credentials by checking if a user with that username exists and if the passwords match
+ */
 const loginUser = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -53,6 +58,9 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
+/**
+ * Get the user from the id
+ */
 const getUserById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     if (!id) {
@@ -67,10 +75,9 @@ const getUserById = asyncHandler(async (req, res) => {
     return res.status(201).json({ message: "Found user", user: user });
 });
 
-// @desc get all users
-// @route get /users
-// @access Private
-
+/**
+ * Get all of the users. Not currently used.
+ */
 const getAllUsers = asyncHandler(async (req, res) => {
     const users = await User.find().select("-password").lean();
     if (!users?.length) {
@@ -80,9 +87,9 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.json(users);
 });
 
-// @desc update a users
-// @route patch /users
-// @access Private
+/**
+ * Verify that the username is not taken and that the password is strong enough
+ */
 const createNewUser = asyncHandler(async (req, res) => {
     const { username, password, confirmPassword } = req.body;
     if (!username || !password || !confirmPassword) {
@@ -106,7 +113,10 @@ const createNewUser = asyncHandler(async (req, res) => {
         // check if the password is strong enough
         // return an appropriate message
         if (!schema.validate(password)) {
+            // find what this password is missing and return it in a list
             const missing = schema.validate(password, { list: true });
+
+            // use the map defined to map each of those to a full message and combine them with a newline char
             const missingText = missing
                 .map((m) => weakPasswordMap[m])
                 .join("\n");
@@ -114,7 +124,7 @@ const createNewUser = asyncHandler(async (req, res) => {
                 .status(400)
                 .json({ message: "Weak Password", missingText });
         }
-        // save user
+        // save user after hashing password
         const hashed = await bcrypt.hash(password, numSaltRounds);
 
         const userObject = { username, password: hashed };
@@ -127,13 +137,16 @@ const createNewUser = asyncHandler(async (req, res) => {
                 .status(201)
                 .json({ message: "User created.", user: returnValue });
         }
-        return res.status(400).json({ message: `Invalid user data` });
+        return res.status(400).json({ message: "Invalid user data" });
     } catch (error) {
         console.log("Error creating user:", error);
         return res.status(500).json({ message: "Server error" });
     }
 });
 
+/**
+ * Not currently used. Used to edit user info
+ */
 const updateUser = asyncHandler(async (req, res) => {
     const { id, username, password } = req.body;
     if (!id || !username || !password) {
@@ -144,8 +157,9 @@ const updateUser = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: `User not found` });
     }
 
+    // there should be a duplicate but the duplicate should have the same id
+    // otherwise the new username conflicts
     const duplicate = await User.findOne({ username }).lean().exec();
-
     if (duplicate && duplicate?._id.toString() !== id) {
         return res.status(409).json({ message: "duplicate username" });
     }
@@ -161,31 +175,42 @@ const updateUser = asyncHandler(async (req, res) => {
     res.json({ message: `${updatedUser.username} updated` });
 });
 
-const deleteUser = asyncHandler(async (req, res) => {
-    const { id } = req.body;
+/**
+ * Delete user. Not currently used.
+ */
+// const deleteUser = asyncHandler(async (req, res) => {
+//     const { id } = req.body;
 
-    if (!id) {
-        return res.status(400).json({ message: `Id required` });
-    }
+//     if (!id) {
+//         return res.status(400).json({ message: "ID required" });
+//     }
 
-    const posts = await Result.find({ user: "id" }).lean().exec();
+//     await Result.deleteMany({ user: id }, (err) => {
+//         if (err) {
+//             return (
+//                 res.status(400), json({ message: "Failed to delete results" })
+//             );
+//         } else {
+//             return res.status(200), json({ message: "Deleted results" });
+//         }
+//     });
 
-    const user = await User.findById(id).exec();
+//     const user = await User.findById(id).exec();
 
-    if (!user) {
-        return res.status(400).json({ message: `user not found` });
-    }
+//     if (!user) {
+//         return res.status(400).json({ message: "User not found" });
+//     }
 
-    const result = await user.deleteOne();
+//     const result = await user.deleteOne();
 
-    const reply = `Username ${user.username} deleted.`;
-    res.json(reply);
-});
+//     const reply = `Username ${user.username} deleted.`;
+//     res.json(reply);
+// });
 
 module.exports = {
     getAllUsers,
     createNewUser,
-    deleteUser,
+    // deleteUser,
     updateUser,
     loginUser,
     getUserById,
