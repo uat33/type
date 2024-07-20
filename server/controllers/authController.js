@@ -67,7 +67,6 @@ const deleteToken = asyncHandler(async (req, res) => {
 });
 
 const refreshUser = asyncHandler(async (req, res) => {
-    console.log(req);
     const token = req.cookies.token;
     if (!token) {
         return res.status(400).json({ message: "No token" });
