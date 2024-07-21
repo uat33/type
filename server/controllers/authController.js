@@ -18,8 +18,8 @@ const createToken = asyncHandler(async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
-            maxAge: 24 * 60 * 60,
+            sameSite: "none",
+            maxAge: 24 * 60 * 60 * 1000,
         });
         return res.status(201).json({ message: "Created token" });
     } catch (error) {
@@ -53,8 +53,8 @@ const refreshToken = asyncHandler(async (req, res) => {
     res.cookie("token", newToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({ message: "Refreshed token" });

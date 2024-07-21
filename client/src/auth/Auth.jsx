@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
                         username: decodedToken.username,
                     });
                     setExpireTime(decodedToken.exp);
-                    console.log(userInfo);
                 }
             } catch (error) {
                 console.log("Invalid token.");
@@ -71,8 +70,7 @@ export const AuthProvider = ({ children }) => {
 
     const refreshToken = async (user) => {
         const currentTime = Date.now() / 1000;
-        console.log("current time is ", currentTime);
-
+        if (!isLoggedIn() || expireTime - currentTime > 300) return;
         try {
             //  Fetch new token from server
             const response = await api.patch("/auth/token", {
@@ -87,6 +85,8 @@ export const AuthProvider = ({ children }) => {
             logout();
         }
     };
+
+    setInterval(refreshToken, 1000 * 60);
 
     return (
         <AuthContext.Provider
